@@ -1,20 +1,23 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import PostList from './posts/PostList';
+import React, { Component, PropTypes } from 'react';
+import {Header, Footer} from './layout';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+      <section className="hero is-fullheight is-default is-bold">
+        <Header />
+        <div className="hero-body">
+          <div className="container">
+            {this.props.children}
+          </div>
         </div>
-        <PostList />
-      </div>
+        <Footer />
+      </section>
     );
   }
 }
+App.propTypes = {
+  children: PropTypes.object.isRequired
+};
 
 export default App;

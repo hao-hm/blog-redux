@@ -6,7 +6,7 @@ export function fetchPosts() {
   //   .then(function (response) {
   //     return response.json();
   //   });
-  const request = axios.get('posts');
+  const request = axios.get('/api/v1/posts');
   return {
     type: constants.FETCH_POSTS,
     payload: request
@@ -26,3 +26,38 @@ export function fetchPostsFailure(error) {
     payload: error
   };
 }
+
+
+export function createPost(props) {
+  const request = axios({
+    method: 'post',
+    data: props,
+    url: '/api/v1/posts',
+  });
+
+  return {
+    type: constants.CREATE_POST,
+    payload: request
+  };
+}
+
+export function createPostSuccess(newPost) {
+  return {
+    type: constants.CREATE_POST_SUCCESS,
+    payload: newPost
+  };
+}
+
+export function createPostFailure(error) {
+  return {
+    type: constants.CREATE_POST_FAILURE,
+    payload: error
+  };
+}
+
+export function resetNewPost() {
+  return {
+    type: constants.RESET_NEW_POST
+  }
+}
+;

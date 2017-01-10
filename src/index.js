@@ -7,7 +7,8 @@ import routes from './routes';
 import reducers from './reducers';
 import promise from 'redux-promise';
 import createLogger from 'redux-logger'
-import 'bootstrap/dist/css/bootstrap.css';
+// import 'bootstrap/dist/css/bootstrap.css';
+import 'bulma/css/bulma.css';
 
 const logger = createLogger();
 const store = createStore(

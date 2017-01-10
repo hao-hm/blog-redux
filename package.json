@@ -4,7 +4,7 @@
   "private": true,
   "proxy": "http://jsonplaceholder.typicode.com/",
   "devDependencies": {
-    "react-scripts": "0.7.0"
+    "react-scripts": "0.8.4"
   },
   "dependencies": {
     "axios": "^0.15.2",
