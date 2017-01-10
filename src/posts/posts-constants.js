@@ -28,3 +28,9 @@ export const DELETE_POST = 'DELETE_POST';
 export const DELETE_POST_SUCCESS = 'DELETE_POST_SUCCESS';
 export const DELETE_POST_FAILURE = 'DELETE_POST_FAILURE';
 export const RESET_DELETED_POST = 'RESET_DELETED_POST';
+
+//Change mode
+export const CHANGE_MODE = 'CHANGE_MODE';
+export const VIEW_MODE = 'VIEW_MODE';
+export const CREATE_MODE = 'CREATE_MODE';
+export const EDIT_MODE = 'EDIT_MODE';

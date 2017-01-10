@@ -60,4 +60,11 @@ export function resetNewPost() {
     type: constants.RESET_NEW_POST
   }
 }
+
+export function changeMode(mode) {
+  return {
+    type: constants.CHANGE_MODE,
+    payload: mode
+  }
+}
 ;

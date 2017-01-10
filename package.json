@@ -2,13 +2,14 @@
   "name": "blog-redux",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://jsonplaceholder.typicode.com/",
+  "proxy": "http://583b12e40b52151200a96db0.mockapi.io/",
   "devDependencies": {
     "react-scripts": "0.8.4"
   },
   "dependencies": {
     "axios": "^0.15.2",
     "bootstrap": "^3.3.7",
+    "bulma": "^0.3.0",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-redux": "^4.0.0",

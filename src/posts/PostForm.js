@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {createPost, createPostSuccess, createPostFailure} from './posts-actions';
+import {createPost, createPostSuccess, createPostFailure, changeMode} from './posts-actions';
+import {VIEW_MODE} from './posts-constants';
 
 class Form extends Component {
   constructor(props) {
@@ -24,17 +25,28 @@ class Form extends Component {
     });
   }
 
+  onCancelClick = ()=>{
+    this.props.changeMode(VIEW_MODE);
+  };
 
   render() {
+    const {loading, error} = this.props.newPost;
+    if (loading) {
+      return <h3>Loading...</h3>
+    } else if (error) {
+      return <div className="alert alert-danger">Error: {error.message}</div>
+    }
     return (
       <from className="box" onSubmit={this.handleSubmit}>
         <label className="label">Title</label>
         <p className="control">
-          <input value={this.state.title} className="input" name="title" type="text" placeholder="Title" onChange={this.handleChange}/>
+          <input value={this.state.title} className="input" name="title" type="text" placeholder="Title"
+                 onChange={this.handleChange}/>
         </p>
         <label className="label">Body</label>
         <p className="control">
-          <textarea value={this.state.body} className="textarea" name="body"  placeholder="Body" onChange={this.handleChange}></textarea>
+          <textarea value={this.state.body} className="textarea" name="body" placeholder="Body"
+                    onChange={this.handleChange}></textarea>
         </p>
         <hr/>
         <div className="control is-grouped">
@@ -42,7 +54,7 @@ class Form extends Component {
             <button type="submit" onClick={this.handleSubmit} className="button is-primary">Submit</button>
           </p>
           <p className="control">
-            <button className="button is-link">Cancel</button>
+            <button onClick={this.onCancelClick} className="button is-link">Cancel</button>
           </p>
         </div>
       </from>
@@ -60,9 +72,15 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     createPost: (props) => {
-      dispatch(createPost(props)).then((response) => {
-        !response.error ? dispatch(createPostSuccess(response.payload)) : dispatch(createPostFailure(response.payload));
-      });
+      dispatch(createPost(props))
+        .then((response) => {
+          !response.error ? dispatch(createPostSuccess(response.payload)) : dispatch(createPostFailure(response.payload));
+        })
+        .catch((response)=> dispatch(createPostFailure(response.payload)))
+        .then(()=> dispatch(changeMode(VIEW_MODE)));
+    },
+    changeMode: (mode) => {
+      dispatch(changeMode(mode))
     }
   }
 };

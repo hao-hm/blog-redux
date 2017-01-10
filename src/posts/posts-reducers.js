@@ -5,7 +5,8 @@ const INITIAL_STATE = {
   postsList: {posts: [], error:null, loading: false},
   newPost:{post:{}, error: null, loading: false},
   activePost:{post:null, error:null, loading: false},
-  deletedPost: {post: null, error:null, loading: false}
+  deletedPost: {post: null, error:null, loading: false},
+  mode: constants.VIEW_MODE
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -44,6 +45,14 @@ export default function(state = INITIAL_STATE, action) {
     case constants.RESET_DELETED_POST:
       return {...state,  deletedPost:{post:null, error:null, loading: false}};
 
+
+    //change mode
+    case constants.CHANGE_MODE:
+      return {
+        ...state,
+        mode: action.payload
+      };
+    
     default:
       return state;
   }
