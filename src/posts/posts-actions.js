@@ -27,7 +27,7 @@ export function fetchPostsFailure(error) {
   };
 }
 
-
+//Create
 export function createPost(props) {
   const request = axios({
     method: 'post',
@@ -61,10 +61,40 @@ export function resetNewPost() {
   }
 }
 
+//Change mode
 export function changeMode(mode) {
   return {
     type: constants.CHANGE_MODE,
     payload: mode
   }
 }
+
+//Delete
+export function deletePosts(posts) {
+  const request = axios({
+    method: 'delete',
+    data: posts,
+    url: '/api/v1/posts',
+  });
+
+  return {
+    type: constants.DELETE_POST,
+    payload: request
+  };
+}
+
+export function deletePostsSuccess(deletedPosts) {
+  return {
+    type: constants.DELETE_POST_SUCCESS,
+    payload: deletedPosts
+  };
+}
+
+export function deletePostsFailure(error) {
+  return {
+    type: constants.DELETE_POST_FAILURE,
+    payload: error
+  };
+}
+
 ;

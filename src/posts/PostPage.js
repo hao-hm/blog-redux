@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux'
 import PostList from './PostList'
 import PostForm from './PostForm'
+import PostToolbar from './PostToolbar'
 import {CREATE_MODE, EDIT_MODE} from './posts-constants';
 
 class PostIndex extends Component {
-  render() {
+  renderContent() {
     let mode =  this.props.mode;
     switch (mode){
       case CREATE_MODE:
@@ -15,6 +16,14 @@ class PostIndex extends Component {
       default:
         return <PostList />;
     }
+  }
+  render(){
+    return (
+      <div>
+        <PostToolbar/>
+        {this.renderContent()}
+      </div>
+    )
   }
 }
 

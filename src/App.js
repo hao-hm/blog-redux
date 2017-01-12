@@ -1,18 +1,22 @@
 import React, { Component, PropTypes } from 'react';
 import {Header, Footer} from './layout';
+//material-ui
+import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Paper from 'material-ui/Paper';
 
 class App extends Component {
   render() {
     return (
-      <section className="hero is-fullheight is-default is-bold">
-        <Header />
-        <div className="hero-body">
-          <div className="container">
+      <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
+        <div>
+          <Header />
+          <div style={{paddingLeft:300}}>
             {this.props.children}
           </div>
         </div>
-        <Footer />
-      </section>
+      </MuiThemeProvider>
     );
   }
 }
