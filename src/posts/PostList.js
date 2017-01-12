@@ -1,11 +1,24 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux'
-import {fetchPosts, fetchPostsSuccess, fetchPostsFailure, changeMode} from './posts-actions';
+import {fetchPosts, fetchPostsSuccess, fetchPostsFailure, changeMode, selectPosts} from './posts-actions';
 import * as constants from './posts-constants';
-import {List, ListItem} from 'material-ui/List';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 class Posts extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      fixedHeader: true,
+      selectable: true,
+      multiSelectable: false,
+      enableSelectAll: true,
+      deselectOnClickaway: true,
+      showCheckboxes: true,
+      height: '600px',
+    };
+  }
   componentWillMount() {
     this.props.fetchPosts();
   }
@@ -13,13 +26,28 @@ class Posts extends Component {
   renderPosts(posts) {
     return posts.map((post) => {
       return (
-        <Link to={`/post/${post.id}`} key={post.id} >
-          <ListItem value={post.id} primaryText={post.title}/>
-        </Link>
+
+        <TableRow key={post.id} selected={post.selected}>
+          <TableRowColumn>
+            <Link to={`/post/${post.id}`}>{post.title}</Link>
+          </TableRowColumn>
+          <TableRowColumn>{post.body}</TableRowColumn>
+        </TableRow>
 
       );
     });
   }
+
+  onRowSelection = (selection)=>{
+    const selectedIds = [];
+    if(Array.isArray(selection)){
+      selection.forEach((index) => {
+        let post = this.props.postsList.posts[index];
+        selectedIds.push(post.id);
+      })
+    }
+    this.props.selectPosts(selectedIds);
+  };
 
   render() {
     const {posts, loading, error} = this.props.postsList;
@@ -30,9 +58,23 @@ class Posts extends Component {
       return <div className="alert alert-danger">Error: {error.message}</div>
     }
     return (
-      <List>
-        {this.renderPosts(posts)}
-      </List>
+      <Table  height={this.state.height}
+              fixedHeader={this.state.fixedHeader}
+              fixedFooter={this.state.fixedFooter}
+              selectable={this.state.selectable}
+              multiSelectable={this.state.multiSelectable}
+              onRowSelection={this.onRowSelection}
+      >
+        <TableHeader>
+          <TableRow>
+            <TableHeaderColumn>Title</TableHeaderColumn>
+            <TableHeaderColumn>Body</TableHeaderColumn>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {this.renderPosts(posts)}
+        </TableBody>
+      </Table>
     );
   }
 }
@@ -53,6 +95,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     changeMode: (mode) => {
       dispatch(changeMode(mode))
+    },
+    selectPosts: (ids)=>{
+      dispatch(selectPosts(ids))
     }
   }
 };

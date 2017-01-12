@@ -54,6 +54,13 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         mode: action.payload
       };
+
+     //select posts
+    case constants.SELECT_POSTS:
+      return {
+        ...state,
+        selectedPosts: [...action.payload]
+      };
     
     default:
       return state;

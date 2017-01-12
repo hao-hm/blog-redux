@@ -11,7 +11,7 @@ import FlatButton from 'material-ui/FlatButton';
 class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = {open: true};
+    this.state = {open: false};
   }
 
   handleToggle = () => this.setState({open: !this.state.open});
@@ -27,10 +27,10 @@ class Header extends Component {
         <Drawer containerStyle={{top: 64}}
                 open={this.state.open}>
           <IndexLink to="/" activeClassName="active">
-            <MenuItem>Home</MenuItem>
+            <MenuItem onTouchTap={this.handleClose}>Home</MenuItem>
           </IndexLink>
           <Link to="/post" activeClassName="active">
-            <MenuItem>Post</MenuItem>
+            <MenuItem onTouchTap={this.handleClose}>Post</MenuItem>
           </Link>
         </Drawer>
       </header>

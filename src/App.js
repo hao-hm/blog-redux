@@ -12,7 +12,7 @@ class App extends Component {
       <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
         <div>
           <Header />
-          <div style={{paddingLeft:300}}>
+          <div>
             {this.props.children}
           </div>
         </div>

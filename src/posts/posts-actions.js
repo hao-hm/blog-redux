@@ -69,12 +69,22 @@ export function changeMode(mode) {
   }
 }
 
+//Select Post
+export function selectPosts(ids) {
+  return {
+    type: constants.SELECT_POSTS,
+    payload: ids
+  }
+}
+
+
+
 //Delete
-export function deletePosts(posts) {
+export function deletePosts(id) {
   const request = axios({
     method: 'delete',
-    data: posts,
-    url: '/api/v1/posts',
+    data: id,
+    url: `/api/v1/posts/${id}`,
   });
 
   return {

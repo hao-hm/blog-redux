@@ -16,17 +16,17 @@ class PToolbar extends Component {
   };
 
   onDeleteClick = ()=> {
-    this.props.deletePosts(this.props.selectedPosts);
+    this.props.deletePosts(this.props.selectedPosts[0]);
   };
 
-  render(){
+  render() {
     return (
       <Toolbar>
         <ToolbarGroup>
           <ToolbarTitle text="Post"/>
           <FlatButton label="Create" onTouchTap={this.onCreateClick}/>
-          <FlatButton label="Edit" onTouchTap={this.onEditClick} />
-          <FlatButton label="Delete" onTouchTap={this.onDeleteClick}/>
+          <FlatButton label="Edit" onTouchTap={this.onEditClick} disabled={this.props.selectedPosts.length !== 1}/>
+          <FlatButton label="Delete" onTouchTap={this.onDeleteClick} disabled={this.props.selectedPosts.length !== 1}/>
         </ToolbarGroup>
       </Toolbar>
     )
