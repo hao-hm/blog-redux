@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import {Header, Footer} from './layout';
+import {Header/*, Footer*/} from './layout';
 //material-ui
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Paper from 'material-ui/Paper';
+
 
 class App extends Component {
   render() {

@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux'
-import {fetchPosts, fetchPostsSuccess, fetchPostsFailure, changeMode, selectPosts} from './posts-actions';
-import * as constants from './posts-constants';
+import {fetchPosts, changeMode, selectPosts} from './posts-actions';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 class Posts extends Component {
@@ -13,8 +12,7 @@ class Posts extends Component {
       fixedHeader: true,
       selectable: true,
       multiSelectable: false,
-      enableSelectAll: true,
-      deselectOnClickaway: true,
+      enableSelectAll: false,
       showCheckboxes: true,
       height: '600px',
     };
@@ -26,7 +24,6 @@ class Posts extends Component {
   renderPosts(posts) {
     return posts.map((post) => {
       return (
-
         <TableRow key={post.id} selected={post.selected}>
           <TableRowColumn>
             <Link to={`/post/${post.id}`}>{post.title}</Link>
@@ -42,7 +39,7 @@ class Posts extends Component {
     const selectedIds = [];
     if(Array.isArray(selection)){
       selection.forEach((index) => {
-        let post = this.props.postsList.posts[index];
+        let post = this.props.posts[index];
         selectedIds.push(post.id);
       })
     }
@@ -50,17 +47,10 @@ class Posts extends Component {
   };
 
   render() {
-    const {posts, loading, error} = this.props.postsList;
-
-    if (loading) {
-      return <div className="container"><h1>Posts</h1><h3>Loading...</h3></div>
-    } else if (error) {
-      return <div className="alert alert-danger">Error: {error.message}</div>
-    }
+    const {posts} = this.props;
     return (
       <Table  height={this.state.height}
               fixedHeader={this.state.fixedHeader}
-              fixedFooter={this.state.fixedFooter}
               selectable={this.state.selectable}
               multiSelectable={this.state.multiSelectable}
               onRowSelection={this.onRowSelection}
@@ -82,16 +72,14 @@ class Posts extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    postsList: state.posts.postsList
+    posts: state.postModule.posts
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchPosts: () => {
-      dispatch(fetchPosts()).then((response) => {
-        !response.error ? dispatch(fetchPostsSuccess(response.payload)) : dispatch(fetchPostsFailure(response.payload));
-      });
+      dispatch(fetchPosts());
     },
     changeMode: (mode) => {
       dispatch(changeMode(mode))

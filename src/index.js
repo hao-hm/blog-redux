@@ -6,7 +6,7 @@ import {Router, browserHistory} from 'react-router';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import routes from './routes';
 import reducers from './reducers';
-import promise from 'redux-promise';
+import thunk from 'redux-thunk';
 import createLogger from 'redux-logger'
 // import 'bootstrap/dist/css/bootstrap.css';
 // import 'bulma/css/bulma.css';
@@ -18,7 +18,7 @@ injectTapEventPlugin();
 const logger = createLogger();
 const store = createStore(
   reducers,
-  applyMiddleware(promise, logger)
+  applyMiddleware(thunk, logger)
 );
 
 render(

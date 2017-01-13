@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
-import {getPost} from './posts-reducers'
+import {find} from './posts-reducers'
 
 class Detail extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return(
       <div>
         <h1>Detail</h1>
-        Title: {this.props.currentPost.title}
-        Body: {this.props.currentPost.body}
+        Title: {this.props.current.title}
+        Body: {this.props.current.body}
       </div>
     )
   }
@@ -19,7 +16,7 @@ class Detail extends Component {
 
 const mapStateToProps = (state, props) => {
   return {
-    currentPost: getPost(state, props.params.id)
+    current: find(state, props.params.id)
   };
 };
 

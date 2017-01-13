@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import PostList from './PostList'
 import PostForm from './PostForm'
 import PostToolbar from './PostToolbar'
+import PostLoading from './PostLoading'
 import {CREATE_MODE, EDIT_MODE} from './posts-constants';
 
 class PostIndex extends Component {
@@ -20,6 +21,7 @@ class PostIndex extends Component {
   render(){
     return (
       <div>
+        <PostLoading />
         <PostToolbar/>
         {this.renderContent()}
       </div>
@@ -29,7 +31,7 @@ class PostIndex extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    mode: state.posts.mode
+    mode: state.postModule.mode
   };
 };
 

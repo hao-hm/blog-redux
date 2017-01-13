@@ -3,7 +3,7 @@ import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import FlatButton from 'material-ui/FlatButton';
 import {connect} from 'react-redux';
 import * as constants from './posts-constants';
-import {deletePosts, deletePostsSuccess, deletePostsFailure, changeMode} from './posts-actions';
+import {deletePosts, changeMode} from './posts-actions';
 
 class PToolbar extends Component {
 
@@ -16,7 +16,7 @@ class PToolbar extends Component {
   };
 
   onDeleteClick = ()=> {
-    this.props.deletePosts(this.props.selectedPosts[0]);
+    this.props.deletePosts(this.props.selectedIds[0]);
   };
 
   render() {
@@ -25,8 +25,8 @@ class PToolbar extends Component {
         <ToolbarGroup>
           <ToolbarTitle text="Post"/>
           <FlatButton label="Create" onTouchTap={this.onCreateClick}/>
-          <FlatButton label="Edit" onTouchTap={this.onEditClick} disabled={this.props.selectedPosts.length !== 1}/>
-          <FlatButton label="Delete" onTouchTap={this.onDeleteClick} disabled={this.props.selectedPosts.length !== 1}/>
+          <FlatButton label="Edit" onTouchTap={this.onEditClick} disabled={this.props.selectedIds.length !== 1}/>
+          <FlatButton label="Delete" onTouchTap={this.onDeleteClick} disabled={this.props.selectedIds.length !== 1}/>
         </ToolbarGroup>
       </Toolbar>
     )
@@ -36,16 +36,14 @@ class PToolbar extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    selectedPosts: state.posts.selectedPosts
+    selectedIds: state.postModule.selectedIds
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deletePosts: (posts) => {
-      dispatch(deletePosts(posts)).then((response) => {
-        !response.error ? dispatch(deletePostsSuccess(response.payload)) : dispatch(deletePostsFailure(response.payload));
-      });
+    deletePosts: (id) => {
+      dispatch(deletePosts(id));
     },
     changeMode: (mode) => {
       dispatch(changeMode(mode))

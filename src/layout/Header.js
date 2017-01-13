@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link, IndexLink} from 'react-router';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './Header.css';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
@@ -20,12 +20,15 @@ class Header extends Component {
   render() {
     return (
       <header>
-        <AppBar title={<span>Blog</span>}
+        <AppBar title={<span>...</span>}
                 onLeftIconButtonTouchTap={this.handleToggle}
                 iconElementRight={<FlatButton label="Login" />}
         />
-        <Drawer containerStyle={{top: 64}}
-                open={this.state.open}>
+        <Drawer
+                //containerStyle={{top: 64}}
+                open={this.state.open}
+                docked={false}
+                onRequestChange={(open) => this.setState({open})}>
           <IndexLink to="/" activeClassName="active">
             <MenuItem onTouchTap={this.handleClose}>Home</MenuItem>
           </IndexLink>

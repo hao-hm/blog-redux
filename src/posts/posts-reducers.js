@@ -1,67 +1,54 @@
 import * as constants from './posts-constants';
-
+import {
+  REQUEST_START, REQUEST_ERROR, REQUEST_END,
+  FETCH_SUCCESS, DELETE_SUCCESS, CREATE_SUCCESS, UPDATE_SUCCESS,
+  CHANGE_MODE, VIEW_MODE, SELECT
+} from './posts-actions';
 
 const INITIAL_STATE = {
-  postsList: {posts: [], error:null, loading: false},
-  newPost:{post:{}, error: null, loading: false},
-  editPost:{post:null, error:null, loading: false},
-  deletePosts: {posts: null, error:null, loading: false},
-  selectedPosts: [],
-  currentPost: {},
-  mode: constants.VIEW_MODE
+  posts: [],
+  loading: false,
+  error: '',
+  selectedIds: [],
+  current: null,
+  mode: VIEW_MODE
 };
 
-export default function(state = INITIAL_STATE, action) {
-  let error;
-  switch(action.type) {
-    case constants.FETCH_POSTS:// start fetching posts and set loading = true
-      return { ...state, postsList: {posts: action.payload, error: null, loading: true} };
-    case constants.FETCH_POSTS_SUCCESS:// return list of posts and make loading = false
-      return { ...state, postsList: {posts: action.payload.data, error:null, loading: false} };
-    case constants.FETCH_POSTS_FAILURE:// return error and make loading = false
-      error = action.payload.data || {message: action.payload.message};//2nd one is network or server down errors
-      return { ...state, postsList: {posts: [], error: error, loading: false} };
-    case constants.RESET_POSTS:// reset postList to initial state
-      return { ...state, postsList: {posts: [], error:null, loading: false} };
-
-    //create post
-    case constants.CREATE_POST:
-      return {...state, newPost: {...state.newPost, loading: true}};
-    case constants.CREATE_POST_SUCCESS:
-      return {...state, newPost: {post:action.payload.data, error:null, loading: false}};
-    case constants.CREATE_POST_FAILURE:
-      error = action.payload || {message: action.payload.message};
-      return {...state, newPost: {post:null, error:error, loading: false}};
-    case constants.RESET_NEW_POST:
-      return {...state,  newPost:{post:null, error:null, loading: false}};
+export default function (state = INITIAL_STATE, action) {
+  switch (action.type) {
+    case REQUEST_START:
+      return {...state, loading: true};
+    case REQUEST_ERROR :
+      return {...state, posts: [action.post, ...state.posts]};
+    case REQUEST_END:
+      return {...state, loading: false};
 
 
-    //delete post
-    case constants.DELETE_POST:
-      return {...state, deletePosts: {...state.deletePosts, loading: true}};
-    case constants.DELETE_POST_SUCCESS:
-      return {...state, deletePosts: {posts:action.payload.data, error:null, loading: false}};
-    case constants.DELETE_POST_FAILURE:
-      error = action.payload || {message: action.payload.message};
-      return {...state, deletePosts: {posts:null, error:error, loading: false}};
-    case constants.RESET_DELETED_POST:
-      return {...state,  deletePosts:{posts:null, error:null, loading: false}};
+    case FETCH_SUCCESS:
+      return {...state, posts: action.posts};
+    case DELETE_SUCCESS:
+      return {...state, posts: state.posts.filter(post => post.id !== action.id)};
+    case CREATE_SUCCESS:
+      return {...state, posts: [...state.posts, action.post]};
+    case UPDATE_SUCCESS:
+      return {...state, posts: [...state.posts.filter(post => post.id !== action.id), action.post]};
 
 
     //change mode
-    case constants.CHANGE_MODE:
+    case CHANGE_MODE:
       return {
         ...state,
-        mode: action.payload
+        mode: action.mode
       };
 
-     //select posts
-    case constants.SELECT_POSTS:
+    //select posts
+    case SELECT:
       return {
         ...state,
-        selectedPosts: [...action.payload]
+        selectedIds: [...action.ids],
+        current: state.posts.find(post => post.id === action.ids[0])
       };
-    
+
     default:
       return state;
   }
@@ -69,7 +56,9 @@ export default function(state = INITIAL_STATE, action) {
 
 
 // Get all posts
-export const getPosts = state => state.posts.postsList.posts;
+export const findAll = state => state.postModule.posts;
 
 // Get post by id
-export const getPost = (state, id) => state.posts.postsList.posts.filter(post => post.id === id)[0];
+export const find = (state, id) => state.postModule.posts.find(post => post.id === id);
+
+export const getCurrentMode = (state) => state.postModule.mode;

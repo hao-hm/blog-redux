@@ -1,22 +1,34 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {createPost, createPostSuccess, createPostFailure, changeMode} from './posts-actions';
-import {VIEW_MODE} from './posts-constants';
+import {createPost, updatePost, changeMode} from './posts-actions';
+import {VIEW_MODE, CREATE_MODE, EDIT_MODE} from './posts-constants';
+import {RaisedButton, TextField} from 'material-ui'
 
 class Form extends Component {
+
   constructor(props) {
     super(props);
-    this.state = {
-      title: '',
-      body: ''
-    };
+    this.state = this.isEdit() ? this.props.current : {title: '', body: ''};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  isCreate = ()=> {
+    return this.props.mode === CREATE_MODE;
+  };
+
+  isEdit = ()=> {
+    return this.props.mode === EDIT_MODE;
+  };
+
+
   handleSubmit(e) {
     e.preventDefault();
-    this.props.createPost(this.state);
+    if (this.isCreate()) {
+      this.props.createPost(this.state);
+    } else {
+      this.props.updatePost(this.state);
+    }
   }
 
   handleChange(e) {
@@ -25,59 +37,43 @@ class Form extends Component {
     });
   }
 
-  onCancelClick = ()=>{
+  onCancelClick = ()=> {
     this.props.changeMode(VIEW_MODE);
   };
 
+
   render() {
-    const {loading, error} = this.props.newPost;
-    if (loading) {
-      return <h3>Loading...</h3>
-    } else if (error) {
-      return <div className="alert alert-danger">Error: {error.message}</div>
-    }
     return (
-      <from className="box" onSubmit={this.handleSubmit}>
-        <label className="label">Title</label>
-        <p className="control">
-          <input value={this.state.title} className="input" name="title" type="text" placeholder="Title"
-                 onChange={this.handleChange}/>
-        </p>
-        <label className="label">Body</label>
-        <p className="control">
-          <textarea value={this.state.body} className="textarea" name="body" placeholder="Body"
-                    onChange={this.handleChange}></textarea>
-        </p>
+      <from onSubmit={this.handleSubmit}>
+        <TextField value={this.state.title} onChange={this.handleChange} name="title" hintText="Title"
+                   floatingLabelText="Title"/>
+        <br/>
+        <TextField value={this.state.body} onChange={this.handleChange} name="body" hintText="Body"
+                   floatingLabelText="Body"/>
         <hr/>
-        <div className="control is-grouped">
-          <p className="control">
-            <button type="submit" onClick={this.handleSubmit} className="button is-primary">Submit</button>
-          </p>
-          <p className="control">
-            <button onClick={this.onCancelClick} className="button is-link">Cancel</button>
-          </p>
+        <div>
+          <RaisedButton label={this.isCreate() ? "Create" : "Update"} primary={true} onTouchTap={this.handleSubmit}
+                        style={{margin: 12}}/>
+          <RaisedButton label="Cancel" onTouchTap={this.onCancelClick}/>
         </div>
       </from>
     );
   }
 }
 
-///PostForm Container
-const mapStateToProps = (state) => {
-  return {
-    newPost: state.posts.newPost
-  };
-};
+const mapStateToProps = (state) => ({
+  current: state.postModule.current,
+  mode: state.postModule.mode
+});
 
+///PostForm Container
 const mapDispatchToProps = (dispatch) => {
   return {
-    createPost: (props) => {
-      dispatch(createPost(props))
-        .then((response) => {
-          !response.error ? dispatch(createPostSuccess(response.payload)) : dispatch(createPostFailure(response.payload));
-        })
-        .catch((response)=> dispatch(createPostFailure(response.payload)))
-        .then(()=> dispatch(changeMode(VIEW_MODE)));
+    createPost: (post) => {
+      dispatch(createPost(post));
+    },
+    updatePost: (post) => {
+      dispatch(updatePost(post));
     },
     changeMode: (mode) => {
       dispatch(changeMode(mode))
