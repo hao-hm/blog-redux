@@ -1,18 +1,17 @@
 import React, {Component} from 'react';
-import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
-import FlatButton from 'material-ui/FlatButton';
+import {RaisedButton, IconButton, Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui';
 import {connect} from 'react-redux';
-import * as constants from './posts-constants';
+import {VIEW_MODE, CREATE_MODE, EDIT_MODE} from './posts-actions';
 import {deletePosts, changeMode} from './posts-actions';
 
 class PToolbar extends Component {
 
   onCreateClick = ()=> {
-    this.props.changeMode(constants.CREATE_MODE);
+    this.props.changeMode(CREATE_MODE);
   };
 
   onEditClick = ()=> {
-    this.props.changeMode(constants.EDIT_MODE);
+    this.props.changeMode(EDIT_MODE);
   };
 
   onDeleteClick = ()=> {
@@ -24,10 +23,15 @@ class PToolbar extends Component {
       <Toolbar>
         <ToolbarGroup>
           <ToolbarTitle text="Post"/>
-          <FlatButton label="Create" onTouchTap={this.onCreateClick}/>
-          <FlatButton label="Edit" onTouchTap={this.onEditClick} disabled={this.props.selectedIds.length !== 1}/>
-          <FlatButton label="Delete" onTouchTap={this.onDeleteClick} disabled={this.props.selectedIds.length !== 1}/>
         </ToolbarGroup>
+        {this.props.mode ===VIEW_MODE &&(
+          <ToolbarGroup>
+            <RaisedButton label="Create" onTouchTap={this.onCreateClick}/>
+            <RaisedButton label="Edit" onTouchTap={this.onEditClick} disabled={this.props.selectedIds.length !== 1}/>
+            <RaisedButton label="Delete" onTouchTap={this.onDeleteClick} disabled={this.props.selectedIds.length !== 1 || this.props.loading > 0}/>
+          </ToolbarGroup>
+        )}
+
       </Toolbar>
     )
   }
@@ -36,7 +40,9 @@ class PToolbar extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    selectedIds: state.postModule.selectedIds
+    selectedIds: state.postModule.selectedIds,
+    mode: state.postModule.mode,
+    loading : state.postModule.loading
   };
 };
 

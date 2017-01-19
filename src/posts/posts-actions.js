@@ -66,7 +66,10 @@ export function deletePosts(id) {
       data: id,
       url: `/api/v1/posts/${id}`,
     })
-      .then(res => dispatch(deletePostsSuccess(res.data.id)))
+      .then(res => {
+        dispatch(deletePostsSuccess(res.data.id));
+        dispatch(selectPosts([]));
+      })
       .catch(error => dispatch(requestError(error)))
       .then(()=> dispatch(requestEnd()));
   };
@@ -94,6 +97,7 @@ export function createPost(post) {
       .then(res => {
         dispatch(createSuccess(res.data));
         dispatch(changeMode(VIEW_MODE));
+        dispatch(selectPosts([]));
       })
       .catch(error => dispatch(requestError(error)))
       .then(()=> dispatch(requestEnd()));
@@ -120,6 +124,7 @@ export function updatePost(post) {
       .then(res => {
         dispatch(updateSuccess(res.data));
         dispatch(changeMode(VIEW_MODE));
+        dispatch(selectPosts([]));
       })
       .catch(error => dispatch(requestError(error)))
       .then(()=> dispatch(requestEnd()));
@@ -149,7 +154,6 @@ export function selectPosts(ids) {
     ids
   }
 }
-
 
 
 

@@ -7,7 +7,7 @@ import {
 
 const INITIAL_STATE = {
   posts: [],
-  loading: false,
+  loading: 0,
   error: '',
   selectedIds: [],
   current: null,
@@ -17,11 +17,11 @@ const INITIAL_STATE = {
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
     case REQUEST_START:
-      return {...state, loading: true};
+      return {...state, loading: state.loading + 1 };
     case REQUEST_ERROR :
-      return {...state, posts: [action.post, ...state.posts]};
+      return {...state, error: action.error};
     case REQUEST_END:
-      return {...state, loading: false};
+      return {...state, loading: state.loading - 1};
 
 
     case FETCH_SUCCESS:

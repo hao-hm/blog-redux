@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {createPost, updatePost, changeMode} from './posts-actions';
+import {bindActionCreators} from 'redux'
+import * as actions from './posts-actions';
 import {VIEW_MODE, CREATE_MODE, EDIT_MODE} from './posts-constants';
-import {RaisedButton, TextField} from 'material-ui'
+import {RaisedButton, TextField, Card, CardHeader, CardActions, CardText, CardTitle} from 'material-ui'
 
 class Form extends Component {
 
@@ -25,9 +26,9 @@ class Form extends Component {
   handleSubmit(e) {
     e.preventDefault();
     if (this.isCreate()) {
-      this.props.createPost(this.state);
+      this.props.actions.createPost(this.state);
     } else {
-      this.props.updatePost(this.state);
+      this.props.actions.updatePost(this.state);
     }
   }
 
@@ -38,24 +39,28 @@ class Form extends Component {
   }
 
   onCancelClick = ()=> {
-    this.props.changeMode(VIEW_MODE);
+    this.props.actions.changeMode(VIEW_MODE);
+    this.props.actions.selectPosts([]);
   };
 
 
   render() {
     return (
       <from onSubmit={this.handleSubmit}>
-        <TextField value={this.state.title} onChange={this.handleChange} name="title" hintText="Title"
-                   floatingLabelText="Title"/>
-        <br/>
-        <TextField value={this.state.body} onChange={this.handleChange} name="body" hintText="Body"
-                   floatingLabelText="Body"/>
-        <hr/>
-        <div>
-          <RaisedButton label={this.isCreate() ? "Create" : "Update"} primary={true} onTouchTap={this.handleSubmit}
-                        style={{margin: 12}}/>
-          <RaisedButton label="Cancel" onTouchTap={this.onCancelClick}/>
-        </div>
+        <Card>
+          <CardTitle title={this.isCreate() ? "Create Post" : "Update Post"}/>
+          <CardText>
+            <TextField value={this.state.title} onChange={this.handleChange} name="title" hintText="Title"
+                       floatingLabelText="Title"/>
+            <br/>
+            <TextField value={this.state.body} onChange={this.handleChange} name="body" hintText="Body"
+                       floatingLabelText="Body"/>
+          </CardText>
+          <CardActions>
+            <RaisedButton label={this.isCreate() ? "Create" : "Update"} primary={true} onTouchTap={this.handleSubmit}/>
+            <RaisedButton label="Cancel" onTouchTap={this.onCancelClick}/>
+          </CardActions>
+        </Card>
       </from>
     );
   }
@@ -67,18 +72,8 @@ const mapStateToProps = (state) => ({
 });
 
 ///PostForm Container
-const mapDispatchToProps = (dispatch) => {
-  return {
-    createPost: (post) => {
-      dispatch(createPost(post));
-    },
-    updatePost: (post) => {
-      dispatch(updatePost(post));
-    },
-    changeMode: (mode) => {
-      dispatch(changeMode(mode))
-    }
-  }
-};
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(actions,dispatch)
+});
 const PostForm = connect(mapStateToProps, mapDispatchToProps)(Form);
 export default PostForm;

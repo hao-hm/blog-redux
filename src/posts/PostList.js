@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux'
-import {fetchPosts, changeMode, selectPosts} from './posts-actions';
+import {bindActionCreators} from 'redux';
+import * as actions from './posts-actions';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 class Posts extends Component {
@@ -14,11 +15,11 @@ class Posts extends Component {
       multiSelectable: false,
       enableSelectAll: false,
       showCheckboxes: true,
-      height: '600px',
+      height: '600px'
     };
   }
   componentWillMount() {
-    this.props.fetchPosts();
+    this.props.actions.fetchPosts();
   }
 
   renderPosts(posts) {
@@ -43,25 +44,20 @@ class Posts extends Component {
         selectedIds.push(post.id);
       })
     }
-    this.props.selectPosts(selectedIds);
+    this.props.actions.selectPosts(selectedIds);
   };
 
   render() {
     const {posts} = this.props;
     return (
-      <Table  height={this.state.height}
-              fixedHeader={this.state.fixedHeader}
-              selectable={this.state.selectable}
-              multiSelectable={this.state.multiSelectable}
-              onRowSelection={this.onRowSelection}
-      >
+      <Table {...this.state} onRowSelection={this.onRowSelection}>
         <TableHeader>
           <TableRow>
             <TableHeaderColumn>Title</TableHeaderColumn>
             <TableHeaderColumn>Body</TableHeaderColumn>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody deselectOnClickaway={false}>
           {this.renderPosts(posts)}
         </TableBody>
       </Table>
@@ -76,18 +72,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchPosts: () => {
-      dispatch(fetchPosts());
-    },
-    changeMode: (mode) => {
-      dispatch(changeMode(mode))
-    },
-    selectPosts: (ids)=>{
-      dispatch(selectPosts(ids))
-    }
-  }
-};
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(actions, dispatch)
+});
+
 const PostList = connect(mapStateToProps, mapDispatchToProps)(Posts);
 export default PostList;

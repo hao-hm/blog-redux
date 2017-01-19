@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import LinearProgress from 'material-ui/LinearProgress';
+import {CircularProgress} from 'material-ui';
 
 class Loading extends Component {
   render() {
     return (
-      <div>
-        {this.props.loading ? <LinearProgress mode="indeterminate"/> : ''}
+      <div style={{position: 'absolute'}}>
+        {this.props.loading ? <CircularProgress /> : ''}
       </div>
     )
   }
